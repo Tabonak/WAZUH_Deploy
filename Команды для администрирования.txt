@@ -1,0 +1,14 @@
+Команды для администрирования
+1. Упал Wazuh-manager (ошибка с API)
+
+# Удаляем файл, который мог остаться от предыдущего запуска
+sudo rm -rf /var/ossec/var/start-script-lock
+
+# Пробуем запустить Wazuh Manager вручную
+sudo /var/ossec/bin/wazuh-control start
+
+#Перезпускаем службу и проверяем статус
+sudo sysctemctl restart wazuh-manager
+sudo sysctemctl status wazuh-manager
+
+2. 
