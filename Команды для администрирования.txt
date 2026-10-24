@@ -11,4 +11,5 @@ sudo /var/ossec/bin/wazuh-control start
 sudo sysctemctl restart wazuh-manager
 sudo sysctemctl status wazuh-manager
 
-2. 
+2. Перестал работать буфер обмена
+sudo systemctl restart run-vmblock\\x2dfuse.mount
