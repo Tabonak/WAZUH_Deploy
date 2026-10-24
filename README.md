@@ -40,6 +40,7 @@
 
 
 ДЕНЬ 2
+
 6. Установка агентов Wazuh
 На Windows 10 и Windows Server установлены Wazuh Agent (через PowerShell).
 В панели Wazuh обе машины появились со статусом Active.
