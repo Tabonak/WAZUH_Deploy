@@ -1,3 +1,4 @@
+ДЕНЬ 1
 1. Архитектура и ресурсы
 Хост: Windows, 32 ГБ ОЗУ, ~1 ТБ диска, гипервизор VMware Workstation.
 Виртуальные машины (4 шт):
@@ -36,3 +37,29 @@
 Настроен файрвол (UFW): разрешен ICMP (ping) и порт 443 (для веб-интерфейса).
 Установлен Wazuh (Manager + Indexer + Dashboard + Filebeat) скриптом wazuh-install.sh -a.
 Получены логин (admin) и пароль для входа в веб-интерфейс Wazuh (https://192.168.10.30).
+
+
+ДЕНЬ 2
+6. Установка агентов Wazuh
+На Windows 10 и Windows Server установлены Wazuh Agent (через PowerShell).
+В панели Wazuh обе машины появились со статусом Active.
+
+7. Настройка аудита (GPO и локально)
+Настроен Advanced Audit Policy через Default Domain Policy на сервере.
+Проблема: Политики аудита (Logon, Account Management) не применялись на клиенте из-за бага с файлом audit.csv.
+Решение: Аудит включен вручную на машинах через auditpol.
+Включена политика «Include command line in process creation events» (теперь в событиях видно команды).
+Проверено событие 4688 (Process Creation) в Wazuh — работает.
+Проверено событие 4720 (Создание пользователя) в Event Viewer — работает.
+
+8. Подготовка машины атакующего (Ubuntu Desktop)
+Исправлены ошибки в Netplan (опечатка adresses -> addresses, права доступа chmod 600).
+Настроен IP 192.168.10.40.
+Установлены инструменты: nmap, hydra, smbclient, python3-pip.
+Проведено сканирование Windows Server (nmap -sV -p- 192.168.10.10), обнаружен открытый порт 445 (SMB).
+
+9. Первая попытка атаки (Brute Force)
+Создан файл passwords.txt со списком паролей.
+Попытка запуска Hydra (hydra -l lab\mans -P passwords.txt smb://192.168.10.10).
+Результат: Атака не удалась. Hydra версии 9.2 не поддерживает современный протокол SMBv2/v3 (выдала ошибку Compiled without LIBSMBCLIENT support).
+Вывод: Современные Windows-серверы защищены от старых инструментов. Для продолжения атаки решено использовать Metasploit (следующий шаг).
